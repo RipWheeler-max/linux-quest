@@ -1,0 +1,541 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ===== CSS Variables ===== */
+:root {
+  --neon-green: #00ff88;
+  --neon-blue: #00d4ff;
+  --neon-purple: #b347d9;
+  --neon-pink: #ff2d95;
+  --neon-yellow: #ffd700;
+  --bg-dark: #0a0e1a;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2332;
+  --border-glow: rgba(0, 255, 136, 0.3);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+body {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Terminal Font ===== */
+.terminal-font {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* ===== Game Title Font ===== */
+.game-font {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-green), var(--neon-blue));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
+}
+
+/* ===== Neon Glow Effects ===== */
+.neon-text {
+  text-shadow: 0 0 7px var(--neon-green), 0 0 10px var(--neon-green), 0 0 21px var(--neon-green);
+}
+
+.neon-text-blue {
+  text-shadow: 0 0 7px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 21px var(--neon-blue);
+}
+
+.neon-text-pink {
+  text-shadow: 0 0 7px var(--neon-pink), 0 0 10px var(--neon-pink), 0 0 21px var(--neon-pink);
+}
+
+.neon-border {
+  box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green);
+  border: 1px solid var(--neon-green);
+}
+
+.neon-border-blue {
+  box-shadow: 0 0 5px var(--neon-blue), inset 0 0 5px rgba(0, 212, 255, 0.3);
+  border: 1px solid var(--neon-blue);
+}
+
+/* ===== Animations ===== */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes scan-line {
+  0% { top: 0%; }
+  100% { top: 100%; }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes particle-float {
+  0% { transform: translateY(0) translateX(0); opacity: 1; }
+  100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green); }
+  50% { box-shadow: 0 0 20px var(--neon-green), 0 0 40px var(--neon-green); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes confetti {
+  0% { transform: translateY(0) rotateZ(0deg); opacity: 1; }
+  100% { transform: translateY(200px) rotateZ(720deg); opacity: 0; }
+}
+
+@keyframes firework {
+  0% { transform: scale(0); opacity: 1; }
+  50% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ===== Background Grid ===== */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* ===== Animated Background ===== */
+.animated-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(179, 71, 217, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== Card Styles ===== */
+.game-card {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(26, 35, 50, 0.9));
+  border: 1px solid rgba(0, 255, 136, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.game-card:hover {
+  border-color: rgba(0, 255, 136, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ===== Button Styles ===== */
+.game-btn {
+  position: relative;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+  border: 1px solid var(--neon-green);
+  border-radius: 8px;
+  color: var(--neon-green);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.game-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2));
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  transform: translateY(-2px);
+}
+
+.game-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.game-btn:hover::before {
+  left: 100%;
+}
+
+/* ===== Input Styles ===== */
+.game-input {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+.game-input:focus {
+  outline: none;
+  border-color: var(--neon-green);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.game-input::placeholder {
+  color: rgba(148, 163, 184, 0.5);
+}
+
+/* ===== Node Styles (for game map) ===== */
+.level-node {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.level-node.completed {
+  background: linear-gradient(135deg, var(--neon-green), #00cc6a);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
+.level-node.unlocked {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
+  border: 2px solid var(--neon-blue);
+  color: var(--neon-blue);
+}
+
+.level-node.locked {
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(100, 116, 139, 0.3);
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* ===== Progress Bar ===== */
+.progress-bar {
+  height: 8px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* ===== Particle Effect ===== */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  animation: particle-float 2s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ===== Scan Line Effect ===== */
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  animation: scan-line 3s linear infinite;
+  pointer-events: none;
+}
+
+/* ===== Achievement Badge ===== */
+.achievement-badge {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--neon-yellow), #ff8c00);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* ===== Combo Counter ===== */
+.combo-text {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Firework Effect ===== */
+.firework {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: firework 1s ease-out forwards;
+}
+
+/* ===== Task Complete Animation ===== */
+.task-complete-flash {
+  animation: task-flash 0.5s ease-out;
+}
+
+@keyframes task-flash {
+  0% { background-color: rgba(0, 255, 136, 0); }
+  30% { background-color: rgba(0, 255, 136, 0.15); }
+  100% { background-color: rgba(0, 255, 136, 0); }
+}
+
+/* ===== XP Float Animation ===== */
+.xp-float {
+  animation: xp-rise 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes xp-rise {
+  0% {
+    transform: translate(-50%, 0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(-50%, -20px) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -80px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* ===== Combo Counter Animation ===== */
+.combo-popup {
+  animation: combo-pop 0.5s ease-out;
+}
+
+@keyframes combo-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ===== Level Complete Celebration ===== */
+.celebration-burst {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.celebration-burst::before,
+.celebration-burst::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  animation: burst 1s ease-out forwards;
+}
+
+.celebration-burst::before {
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.celebration-burst::after {
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.3) 0%, transparent 70%);
+  animation-delay: 0.2s;
+}
+
+@keyframes burst {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* ===== Step Highlight ===== */
+.step-highlight {
+  position: relative;
+}
+
+.step-highlight::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--neon-green), var(--neon-blue));
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.step-highlight.active::before {
+  opacity: 1;
+}
+
+/* ===== Terminal Typing Effect ===== */
+.terminal-typing {
+  position: relative;
+}
+
+.terminal-typing::after {
+  content: '█';
+  animation: blink 1s step-end infinite;
+  color: var(--neon-green);
+}
+
+/* ===== Success Checkmark ===== */
+.success-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--neon-green), #00cc6a);
+  border-radius: 50%;
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  animation: check-pop 0.3s ease-out;
+}
+
+@keyframes check-pop {
+  0% { transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* ===== Glow Pulse on Hover ===== */
+.glow-hover {
+  transition: all 0.3s ease;
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3), 0 0 30px rgba(0, 255, 136, 0.1);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .level-node {
+    width: 50px;
+    height: 50px;
+    font-size: 14px;
+  }
+}
