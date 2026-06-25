@@ -162,8 +162,8 @@ linux-quest/
 
 如有任何问题或建议，欢迎联系：
 
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- Email: your.email@example.com
+- GitHub: https://github.com/RipWheeler-max
+- Email: roguesky029@gmail.com
 
 ---
 
