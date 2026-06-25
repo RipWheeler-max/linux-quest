@@ -1,13 +1,381 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>linux-quest</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Quest - 交互式 Linux 学习平台</title>
+    <meta name="description" content="一个交互式的 Linux 命令行学习平台，通过游戏化的方式帮助初学者掌握 Linux 基础命令。">
+    <meta name="keywords" content="Linux, 学习, 命令行, 终端, 教程, 交互式">
+    <link rel="icon" type="image/svg+xml" href="../public/favicon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .cta {
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .commands {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 4rem 0;
+            overflow-x: auto;
+        }
+
+        .commands h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .command {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        .command code {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .command span {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 4rem 0;
+        }
+
+        .tech {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .tech-name {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🐧</div>
+            <h1>Linux Quest</h1>
+            <p class="subtitle">
+                一个交互式的 Linux 命令行学习平台，通过游戏化的方式帮助初学者掌握 Linux 基础命令
+            </p>
+            <div class="badges">
+                <span class="badge">⚛️ React 19</span>
+                <span class="badge">📘 TypeScript 6</span>
+                <span class="badge">⚡ Vite 8</span>
+                <span class="badge">🔥 Firebase</span>
+                <span class="badge">🎨 Tailwind CSS</span>
+            </div>
+        </header>
+
+        <section class="features">
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>游戏化学习</h3>
+                <p>关卡制学习系统，从基础命令到高级技巧，循序渐进，让学习变得有趣</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💻</div>
+                <h3>实时终端</h3>
+                <p>内置虚拟终端模拟器，无需真实 Linux 环境，随时随地练习</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📚</div>
+                <h3>丰富课程</h3>
+                <p>涵盖 pwd、ls、cd、mkdir 等 10+ 基础命令，每个命令都有详细讲解</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💡</div>
+                <h3>智能提示</h3>
+                <p>每个关卡提供 3 个渐进式提示，帮助你理解命令的原理和用法</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <h3>用户系统</h3>
+                <p>Firebase 认证保障安全，学习进度云端同步，多设备无缝切换</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>进度追踪</h3>
+                <p>详细的学习进度仪表盘，记录你的成就，激励持续学习</p>
+            </div>
+        </section>
+
+        <section class="commands">
+            <h2>🎮 学习内容</h2>
+            <div class="command-grid">
+                <div class="command">
+                    <code>pwd</code> - <span>查看当前目录</span>
+                </div>
+                <div class="command">
+                    <code>ls</code> - <span>列出目录内容</span>
+                </div>
+                <div class="command">
+                    <code>cd</code> - <span>切换目录</span>
+                </div>
+                <div class="command">
+                    <code>mkdir</code> - <span>创建目录</span>
+                </div>
+                <div class="command">
+                    <code>touch</code> - <span>创建文件</span>
+                </div>
+                <div class="command">
+                    <code>cp</code> - <span>复制文件</span>
+                </div>
+                <div class="command">
+                    <code>mv</code> - <span>移动/重命名</span>
+                </div>
+                <div class="command">
+                    <code>rm</code> - <span>删除文件</span>
+                </div>
+                <div class="command">
+                    <code>cat</code> - <span>查看文件内容</span>
+                </div>
+                <div class="command">
+                    <code>echo</code> - <span>输出文本</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h2 style="font-size: 2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 1.5rem;">
+                🚀 开始你的 Linux 学习之旅
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                无需安装任何软件，打开浏览器就能学习 Linux 命令行
+            </p>
+            <a href="https://github.com/rogue/linux-quest" class="btn">
+                ⭐ GitHub 仓库
+            </a>
+        </section>
+
+        <section class="tech-stack">
+            <div class="tech">
+                <div class="tech-icon">⚛️</div>
+                <span class="tech-name">React</span>
+            </div>
+            <div class="tech">
+                <div class="tech-icon">📘</div>
+                <span class="tech-name">TypeScript</span>
+            </div>
+            <div class="tech">
+                <div class="tech-icon">⚡</div>
+                <span class="tech-name">Vite</span>
+            </div>
+            <div class="tech">
+                <div class="tech-icon">🎨</div>
+                <span class="tech-name">Tailwind</span>
+            </div>
+            <div class="tech">
+                <div class="tech-icon">🔥</div>
+                <span class="tech-name">Firebase</span>
+            </div>
+        </section>
+
+        <footer>
+            <p>
+                Built with ❤️ by <a href="https://github.com/rogue">rogue</a> |
+                <a href="https://github.com/rogue/linux-quest">View on GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
 </html>
