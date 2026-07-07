@@ -13,6 +13,7 @@ export default function Terminal({ onCommandExecuted }: TerminalProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [commandFlash, setCommandFlash] = useState(false);
   const [lastCommand, setLastCommand] = useState('');
+  const [historyLength, setHistoryLength] = useState(0);
   const engineRef = useRef<TerminalEngine | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -36,6 +37,8 @@ export default function Terminal({ onCommandExecuted }: TerminalProps) {
     engineRef.current.executeCommand(command);
     const stateAfterExecution = engineRef.current.getState();
     setOutput([...stateAfterExecution.output]);
+    setHistoryLength(stateAfterExecution.commandHistory.length);
+    setCurrentDir(engineRef.current.getCurrentDir());
 
     if (onCommandExecuted) {
       onCommandExecuted(command, engineRef.current);
@@ -81,7 +84,7 @@ export default function Terminal({ onCommandExecuted }: TerminalProps) {
     }
   };
 
-  const currentDir = engineRef.current?.getCurrentDir() || '~';
+  const [currentDir, setCurrentDir] = useState('~');
 
   return (
     <div className="rounded-xl overflow-hidden border border-[#1e293b] shadow-[0_0_30px_rgba(0,255,136,0.1)] relative">
@@ -161,7 +164,7 @@ export default function Terminal({ onCommandExecuted }: TerminalProps) {
       {/* Terminal Footer */}
       <div className="bg-[#111827] px-4 py-1.5 flex items-center justify-between border-t border-[#1e293b]">
         <div className="text-[10px] text-[#475569] terminal-font">
-          {engineRef.current?.getState().commandHistory.length || 0} commands
+          {historyLength} commands
         </div>
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />

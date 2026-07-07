@@ -527,8 +527,10 @@ export const levels: Level[] = [
     ],
     tasks: [
       { id: '25-1', instruction: '创建脚本：echo \'#!/bin/bash\' > script.sh', command: 'echo \'#!/bin/bash\' > script.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'echo') && hasCommandContaining(state.commandHistory, 'script.sh'), hint: '输入 echo \'#!/bin/bash\' > script.sh' },
-      { id: '25-2', instruction: '添加执行权限：chmod +x script.sh', command: 'chmod +x script.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, 'chmod +x script.sh'), hint: '输入 chmod +x script.sh' },
-      { id: '25-3', instruction: '运行脚本：./script.sh', command: './script.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, './script.sh'), hint: '输入 ./script.sh' }
+      { id: '25-2', instruction: '定义变量：echo \'NAME="Linux"\' >> script.sh', command: 'echo \'NAME="Linux"\' >> script.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'NAME="Linux"'), hint: '输入 echo \'NAME="Linux"\' >> script.sh' },
+      { id: '25-3', instruction: '使用变量：echo \'echo "Hello $NAME"\' >> script.sh', command: 'echo \'echo "Hello $NAME"\' >> script.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'Hello $NAME'), hint: '输入 echo \'echo "Hello $NAME"\' >> script.sh' },
+      { id: '25-4', instruction: '添加执行权限：chmod +x script.sh', command: 'chmod +x script.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'chmod') && hasCommandContaining(state.commandHistory, 'script.sh'), hint: '输入 chmod +x script.sh' },
+      { id: '25-5', instruction: '运行脚本：./script.sh', command: './script.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, './script.sh'), hint: '输入 ./script.sh' }
     ],
     lesson: `# Shell 变量\n\n## 定义变量\n\n\`\`\`bash\nNAME="value"  # 等号两边不能有空格！\n\`\`\`\n\n## 使用变量\n\n\`\`\`bash\necho \$NAME\necho \${NAME}\n\`\`\`\n\n## 常用环境变量\n\n| 变量 | 含义 |\n|------|------|\n| \$HOME | 主目录 |\n| \$USER | 当前用户 |\n| \$PWD | 当前目录 |\n| \$PATH | 命令搜索路径 |`,
     hints: ['变量名不能以数字开头', '等号两边不能有空格', '用 $ 符号引用变量'],
@@ -545,12 +547,15 @@ export const levels: Level[] = [
       { instruction: '输入 echo \'#!/bin/bash\' > check.sh 创建脚本', command: 'echo \'#!/bin/bash\' > check.sh', explanation: '创建新脚本' },
       { instruction: '输入 echo \'NUM=10\' >> check.sh 定义变量', command: 'echo \'NUM=10\' >> check.sh', explanation: '定义数字变量' },
       { instruction: '输入 echo \'if [ $NUM -gt 5 ]; then echo "大于5"; fi\' >> check.sh', command: 'echo \'if [ $NUM -gt 5 ]; then echo "大于5"; fi\' >> check.sh', explanation: 'if 条件判断' },
-      { instruction: '输入 chmod +x check.sh && ./check.sh 运行', command: 'chmod +x check.sh && ./check.sh', explanation: '执行脚本' }
+      { instruction: '输入 chmod +x check.sh 添加执行权限', command: 'chmod +x check.sh', explanation: '添加执行权限' },
+      { instruction: '输入 ./check.sh 运行脚本', command: './check.sh', explanation: '执行脚本' }
     ],
     tasks: [
       { id: '26-1', instruction: '创建脚本：echo \'#!/bin/bash\' > check.sh', command: 'echo \'#!/bin/bash\' > check.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'echo') && hasCommandContaining(state.commandHistory, 'check.sh'), hint: '输入 echo \'#!/bin/bash\' > check.sh' },
-      { id: '26-2', instruction: '添加执行权限：chmod +x check.sh', command: 'chmod +x check.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, 'chmod +x check.sh'), hint: '输入 chmod +x check.sh' },
-      { id: '26-3', instruction: '运行脚本：./check.sh', command: './check.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, './check.sh'), hint: '输入 ./check.sh' }
+      { id: '26-2', instruction: '定义变量：echo \'NUM=10\' >> check.sh', command: 'echo \'NUM=10\' >> check.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'NUM=10'), hint: '输入 echo \'NUM=10\' >> check.sh' },
+      { id: '26-3', instruction: 'if条件判断：echo \'if [ $NUM -gt 5 ]; then echo "大于5"; fi\' >> check.sh', command: 'echo \'if [ $NUM -gt 5 ]; then echo "大于5"; fi\' >> check.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, '-gt 5'), hint: '输入 echo \'if [ $NUM -gt 5 ]; then echo "大于5"; fi\' >> check.sh' },
+      { id: '26-4', instruction: '添加执行权限：chmod +x check.sh', command: 'chmod +x check.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'chmod') && hasCommandContaining(state.commandHistory, 'check.sh'), hint: '输入 chmod +x check.sh' },
+      { id: '26-5', instruction: '运行脚本：./check.sh', command: './check.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, './check.sh'), hint: '输入 ./check.sh' }
     ],
     lesson: `# if 条件判断\n\n## 语法\n\n\`\`\`bash\nif [ 条件 ]; then\n    命令\nelif [ 条件 ]; then\n    命令\nelse\n    命令\nfi\n\`\`\`\n\n## 数字比较\n\n| 运算符 | 含义 |\n|--------|------|\n| -eq | 等于 |\n| -ne | 不等于 |\n| -gt | 大于 |\n| -lt | 小于 |\n| -ge | 大于等于 |\n| -le | 小于等于 |\n\n## 字符串比较\n\n\`\`\`bash\nif [ "$str" = "hello" ]; then\n\`\`\``,
     hints: ['[ ] 两边必须有空格', '变量用双引号包围更安全', '-gt 是 greater than 的缩写'],
@@ -566,12 +571,14 @@ export const levels: Level[] = [
     steps: [
       { instruction: '输入 echo \'#!/bin/bash\' > loop.sh 创建脚本', command: 'echo \'#!/bin/bash\' > loop.sh', explanation: '创建新脚本' },
       { instruction: '输入 echo \'for i in 1 2 3; do echo "Number: $i"; done\' >> loop.sh', command: 'echo \'for i in 1 2 3; do echo "Number: $i"; done\' >> loop.sh', explanation: 'for 循环遍历列表' },
-      { instruction: '输入 chmod +x loop.sh && ./loop.sh 运行', command: 'chmod +x loop.sh && ./loop.sh', explanation: '执行脚本' }
+      { instruction: '输入 chmod +x loop.sh 添加执行权限', command: 'chmod +x loop.sh', explanation: '添加执行权限' },
+      { instruction: '输入 ./loop.sh 运行脚本', command: './loop.sh', explanation: '执行脚本' }
     ],
     tasks: [
       { id: '27-1', instruction: '创建脚本：echo \'#!/bin/bash\' > loop.sh', command: 'echo \'#!/bin/bash\' > loop.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'echo') && hasCommandContaining(state.commandHistory, 'loop.sh'), hint: '输入 echo \'#!/bin/bash\' > loop.sh' },
-      { id: '27-2', instruction: '添加执行权限：chmod +x loop.sh', command: 'chmod +x loop.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, 'chmod +x loop.sh'), hint: '输入 chmod +x loop.sh' },
-      { id: '27-3', instruction: '运行脚本：./loop.sh', command: './loop.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, './loop.sh'), hint: '输入 ./loop.sh' }
+      { id: '27-2', instruction: 'for循环遍历列表：echo \'for i in 1 2 3; do echo "Number: $i"; done\' >> loop.sh', command: 'echo \'for i in 1 2 3; do echo "Number: $i"; done\' >> loop.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'for i in 1 2 3'), hint: '输入 echo \'for i in 1 2 3; do echo "Number: $i"; done\' >> loop.sh' },
+      { id: '27-3', instruction: '添加执行权限：chmod +x loop.sh', command: 'chmod +x loop.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'chmod') && hasCommandContaining(state.commandHistory, 'loop.sh'), hint: '输入 chmod +x loop.sh' },
+      { id: '27-4', instruction: '运行脚本：./loop.sh', command: './loop.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, './loop.sh'), hint: '输入 ./loop.sh' }
     ],
     lesson: `# for 循环\n\n## 列表遍历\n\n\`\`\`bash\nfor i in 1 2 3 4 5\ndo\n    echo $i\ndone\n\`\`\`\n\n## 文件遍历\n\n\`\`\`bash\nfor file in *.txt\ndo\n    echo $file\ndone\n\`\`\`\n\n## C 风格\n\n\`\`\`bash\nfor ((i=0; i<5; i++))\ndo\n    echo $i\ndone\n\`\`\``,
     hints: ['for i in ... 可以遍历任何列表', '*.txt 会匹配所有txt文件', 'do 和 done 是循环体的开始和结束'],
@@ -588,12 +595,15 @@ export const levels: Level[] = [
       { instruction: '输入 echo \'#!/bin/bash\' > while.sh 创建脚本', command: 'echo \'#!/bin/bash\' > while.sh', explanation: '创建新脚本' },
       { instruction: '输入 echo \'COUNT=1\' >> while.sh', command: 'echo \'COUNT=1\' >> while.sh', explanation: '定义计数器' },
       { instruction: '输入 echo \'while [ $COUNT -le 3 ]; do echo "Count: $COUNT"; COUNT=$((COUNT+1)); done\' >> while.sh', command: 'echo \'while [ $COUNT -le 3 ]; do echo "Count: $COUNT"; COUNT=$((COUNT+1)); done\' >> while.sh', explanation: 'while 循环' },
-      { instruction: '输入 chmod +x while.sh && ./while.sh 运行', command: 'chmod +x while.sh && ./while.sh', explanation: '执行脚本' }
+      { instruction: '输入 chmod +x while.sh 添加执行权限', command: 'chmod +x while.sh', explanation: '添加执行权限' },
+      { instruction: '输入 ./while.sh 运行脚本', command: './while.sh', explanation: '执行脚本' }
     ],
     tasks: [
       { id: '28-1', instruction: '创建脚本：echo \'#!/bin/bash\' > while.sh', command: 'echo \'#!/bin/bash\' > while.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'echo') && hasCommandContaining(state.commandHistory, 'while.sh'), hint: '输入 echo \'#!/bin/bash\' > while.sh' },
-      { id: '28-2', instruction: '添加执行权限：chmod +x while.sh', command: 'chmod +x while.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, 'chmod +x while.sh'), hint: '输入 chmod +x while.sh' },
-      { id: '28-3', instruction: '运行脚本：./while.sh', command: './while.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, './while.sh'), hint: '输入 ./while.sh' }
+      { id: '28-2', instruction: '定义计数器：echo \'COUNT=1\' >> while.sh', command: 'echo \'COUNT=1\' >> while.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'COUNT=1'), hint: '输入 echo \'COUNT=1\' >> while.sh' },
+      { id: '28-3', instruction: 'while循环：echo \'while [ $COUNT -le 3 ]; do echo "Count: $COUNT"; COUNT=$((COUNT+1)); done\' >> while.sh', command: 'echo \'while [ $COUNT -le 3 ]; do echo "Count: $COUNT"; COUNT=$((COUNT+1)); done\' >> while.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'while [ $COUNT -le 3 ]'), hint: '输入 echo \'while [ $COUNT -le 3 ]; do echo "Count: $COUNT"; COUNT=$((COUNT+1)); done\' >> while.sh' },
+      { id: '28-4', instruction: '添加执行权限：chmod +x while.sh', command: 'chmod +x while.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'chmod') && hasCommandContaining(state.commandHistory, 'while.sh'), hint: '输入 chmod +x while.sh' },
+      { id: '28-5', instruction: '运行脚本：./while.sh', command: './while.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, './while.sh'), hint: '输入 ./while.sh' }
     ],
     lesson: `# while 循环\n\n## 语法\n\n\`\`\`bash\nwhile [ 条件 ]\ndo\n    命令\ndone\n\`\`\`\n\n## until 循环\n\n\`\`\`bash\nuntil [ 条件 ]  # 条件为假时循环\ndo\n    命令\ndone\n\`\`\`\n\n## break 和 continue\n\n\`\`\`bash\nbreak    # 跳出循环\ncontinue # 跳过本次迭代\n\`\`\``,
     hints: ['while 条件为真时循环', 'until 条件为假时循环（相反）', '小心无限循环！'],
@@ -610,12 +620,15 @@ export const levels: Level[] = [
       { instruction: '输入 echo \'#!/bin/bash\' > func.sh 创建脚本', command: 'echo \'#!/bin/bash\' > func.sh', explanation: '创建新脚本' },
       { instruction: '输入 echo \'greet() { echo "Hello $1!"; }\' >> func.sh 定义函数', command: 'echo \'greet() { echo "Hello $1!"; }\' >> func.sh', explanation: '定义一个问候函数' },
       { instruction: '输入 echo \'greet "World"\' >> func.sh 调用函数', command: 'echo \'greet "World"\' >> func.sh', explanation: '调用函数并传参' },
-      { instruction: '输入 chmod +x func.sh && ./func.sh 运行', command: 'chmod +x func.sh && ./func.sh', explanation: '执行脚本' }
+      { instruction: '输入 chmod +x func.sh 添加执行权限', command: 'chmod +x func.sh', explanation: '添加执行权限' },
+      { instruction: '输入 ./func.sh 运行脚本', command: './func.sh', explanation: '执行脚本' }
     ],
     tasks: [
       { id: '29-1', instruction: '创建脚本：echo \'#!/bin/bash\' > func.sh', command: 'echo \'#!/bin/bash\' > func.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'echo') && hasCommandContaining(state.commandHistory, 'func.sh'), hint: '输入 echo \'#!/bin/bash\' > func.sh' },
-      { id: '29-2', instruction: '添加执行权限：chmod +x func.sh', command: 'chmod +x func.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, 'chmod +x func.sh'), hint: '输入 chmod +x func.sh' },
-      { id: '29-3', instruction: '运行脚本：./func.sh', command: './func.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, './func.sh'), hint: '输入 ./func.sh' }
+      { id: '29-2', instruction: '定义函数：echo \'greet() { echo "Hello $1!"; }\' >> func.sh', command: 'echo \'greet() { echo "Hello $1!"; }\' >> func.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'greet()'), hint: '输入 echo \'greet() { echo "Hello $1!"; }\' >> func.sh' },
+      { id: '29-3', instruction: '调用函数：echo \'greet "World"\' >> func.sh', command: 'echo \'greet "World"\' >> func.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'greet "World"'), hint: '输入 echo \'greet "World"\' >> func.sh' },
+      { id: '29-4', instruction: '添加执行权限：chmod +x func.sh', command: 'chmod +x func.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'chmod') && hasCommandContaining(state.commandHistory, 'func.sh'), hint: '输入 chmod +x func.sh' },
+      { id: '29-5', instruction: '运行脚本：./func.sh', command: './func.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, './func.sh'), hint: '输入 ./func.sh' }
     ],
     lesson: `# Shell 函数\n\n## 定义函数\n\n\`\`\`bash\nfunction_name() {\n    命令\n    return 返回值\n}\n\`\`\`\n\n## 函数参数\n\n\`\`\`bash\ngreet() {\n    echo "Hello \$1"  # \$1 是第一个参数\n    echo "Total args: \$#"\n}\ngreet "World"\n\`\`\`\n\n## 返回值\n\n\`\`\`bash\nadd() {\n    return \$(( \$1 + \$2 ))\n}\nadd 3 5\nresult=\$?  # \$? 获取返回值\n\`\`\``,
     hints: ['$1, $2... 是函数参数', '$# 是参数个数', '$? 是上一个命令的返回值'],
@@ -631,12 +644,14 @@ export const levels: Level[] = [
     steps: [
       { instruction: '输入 echo \'#!/bin/bash\' > final.sh 创建脚本', command: 'echo \'#!/bin/bash\' > final.sh', explanation: '创建最终脚本' },
       { instruction: '输入 echo \'echo "脚本测试成功！"\' >> final.sh', command: 'echo \'echo "脚本测试成功！"\' >> final.sh', explanation: '添加输出' },
-      { instruction: '输入 chmod +x final.sh && ./final.sh 运行', command: 'chmod +x final.sh && ./final.sh', explanation: '执行脚本' }
+      { instruction: '输入 chmod +x final.sh 添加执行权限', command: 'chmod +x final.sh', explanation: '添加执行权限' },
+      { instruction: '输入 ./final.sh 运行脚本', command: './final.sh', explanation: '执行脚本' }
     ],
     tasks: [
       { id: '30-1', instruction: '创建脚本：echo \'#!/bin/bash\' > final.sh', command: 'echo \'#!/bin/bash\' > final.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'echo') && hasCommandContaining(state.commandHistory, 'final.sh'), hint: '输入 echo \'#!/bin/bash\' > final.sh' },
-      { id: '30-2', instruction: '添加执行权限：chmod +x final.sh', command: 'chmod +x final.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, 'chmod +x final.sh'), hint: '输入 chmod +x final.sh' },
-      { id: '30-3', instruction: '运行脚本：./final.sh', command: './final.sh', validator: (state: TerminalState) => hasCommand(state.commandHistory, './final.sh'), hint: '输入 ./final.sh' }
+      { id: '30-2', instruction: '添加输出：echo \'echo "脚本测试成功！"\' >> final.sh', command: 'echo \'echo "脚本测试成功！"\' >> final.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, '脚本测试成功！'), hint: '输入 echo \'echo "脚本测试成功！"\' >> final.sh' },
+      { id: '30-3', instruction: '添加执行权限：chmod +x final.sh', command: 'chmod +x final.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, 'chmod') && hasCommandContaining(state.commandHistory, 'final.sh'), hint: '输入 chmod +x final.sh' },
+      { id: '30-4', instruction: '运行脚本：./final.sh', command: './final.sh', validator: (state: TerminalState) => hasCommandContaining(state.commandHistory, './final.sh'), hint: '输入 ./final.sh' }
     ],
     lesson: `# 脚本篇总结\n\n恭喜你完成了脚本篇！\n\n## 知识回顾\n\n| 主题 | 要点 |\n|------|------|\n| 变量 | NAME="value", \$NAME |\n| 条件 | if [ condition ]; then |\n| 循环 | for i in ...; while [ condition ] |\n| 函数 | name() { commands } |\n\n## 脚本调试\n\n\`\`\`bash\nbash -x script.sh  # 调试模式\nset -e             # 出错即停\n\`\`\`\n\n## 最佳实践\n\n1. 第一行加 #!/bin/bash\n2. 变量用双引号\n3. 加注释\n4. 错误处理`,
     hints: ['#!/bin/bash 告诉系统用bash执行', 'bash -x 可以看到每一步执行', '多写多练，脚本是自动化的基础'],

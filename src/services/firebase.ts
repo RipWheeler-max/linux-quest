@@ -77,7 +77,7 @@ export const completeLevel = async (userId: string, levelId: number) => {
   }
 };
 
-export const useHint = async (userId: string, levelId: number) => {
+export const consumeHint = async (userId: string, levelId: number) => {
   const progress = await getUserProgress(userId);
   if (progress) {
     const hintsUsed = { ...progress.hintsUsed };

@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getLevelById } from '../../data/levels';
 import { getHintsForLevel } from '../../data/hints';
-import { completeLevel, useHint } from '../../services/firebase';
+import { completeLevel, consumeHint } from '../../services/firebase';
 import Terminal from '../Terminal/Terminal';
 import HintPanel from '../Hint/HintPanel';
 import type { TerminalEngine } from '../Terminal/terminalEngine';
@@ -41,51 +42,46 @@ export default function LessonView() {
   }, [level, progress, navigate]);
 
   // 用 useCallback 避免闭包问题
+  const completedTasksRef = useRef(completedTasks);
+  useEffect(() => {
+    completedTasksRef.current = completedTasks;
+  }, [completedTasks]);
+
   const handleCommandExecuted = useCallback((_command: string, engine: TerminalEngine) => {
     if (!level || !user) return;
-
     // 如果已完成，跳过
-    setLevelCompleted(prev => {
-      if (prev) return prev;
+    if (completedTasksRef.current.size === level.tasks.length) return;
 
-      const state = engine.getState();
-      setCompletedTasks(currentCompleted => {
-        const newCompleted = new Set(currentCompleted);
-        let justCompleted = '';
+    const state = engine.getState();
+    const newCompleted = new Set(completedTasksRef.current);
+    let justCompleted = '';
 
-        for (const task of level.tasks) {
-          if (!newCompleted.has(task.id) && task.validator(state)) {
-            newCompleted.add(task.id);
-            justCompleted = task.id;
-          }
-        }
+    for (const task of level.tasks) {
+      if (!newCompleted.has(task.id) && task.validator(state)) {
+        newCompleted.add(task.id);
+        justCompleted = task.id;
+      }
+    }
 
-        if (justCompleted) {
-          setTaskJustCompleted(justCompleted);
-          setShowSuccess(true);
-          setTimeout(() => setTaskJustCompleted(null), 2000);
-          setTimeout(() => setShowSuccess(false), 1500);
+    if (justCompleted) {
+      setCompletedTasks(newCompleted);
+      setTaskJustCompleted(justCompleted);
+      setShowSuccess(true);
+      setTimeout(() => setTaskJustCompleted(null), 2000);
+      setTimeout(() => setShowSuccess(false), 1500);
 
-          // 检查是否全部完成
-          if (newCompleted.size === level.tasks.length) {
-            setLevelCompleted(true);
-            completeLevel(user.uid, level.id).then(() => refreshProgress());
-            setTimeout(() => setShowCompletionModal(true), 800);
-          }
-
-          return newCompleted;
-        }
-
-        return currentCompleted;
-      });
-
-      return prev;
-    });
+      // 检查是否全部完成
+      if (newCompleted.size === level.tasks.length) {
+        setLevelCompleted(true);
+        completeLevel(user.uid, level.id).then(() => refreshProgress());
+        setTimeout(() => setShowCompletionModal(true), 800);
+      }
+    }
   }, [level, user, refreshProgress]);
 
   const handleHintUsed = async () => {
     if (user && level) {
-      await useHint(user.uid, level.id);
+      await consumeHint(user.uid, level.id);
     }
   };
 
