@@ -78,7 +78,12 @@ export default function Dashboard() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#00d4ff] rounded-full opacity-5 blur-[100px]" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 w-full">
+        {/* Version Number */}
+        <div className="absolute top-4 right-4 sm:top-8 sm:right-8 text-[#94a3b8] game-font text-sm opacity-80 z-50">
+          v0.1.1
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="game-font text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-[#00d4ff] to-[#b347d9] mb-4">
